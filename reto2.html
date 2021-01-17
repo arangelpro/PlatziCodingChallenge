@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Reto 2: Área de un Triángulo</title>
+	</head>
+	<body>
+		<label for="b">Ingrese Base</label>
+		<input
+			id="b"
+			type="number"
+			placeholder="Ingrese la base"
+			name="b"
+			value="0"
+		/>
+		<label for="h">Ingrese Altura</label>
+		<input
+			id="h"
+			type="number"
+			placeholder="Ingrese la altura"
+			name="h"
+			value="0"
+		/>
+		<button type="button" onclick="handleArea();">Calcular Area</button>
+		<h1 id="area"></h1>
+		<h2 id="tipo"></h2>
+		<script>
+			alert("Bienvenido al Reto 2: Área de un Triángulo");
+			function handleArea() {
+				//debugger;
+				let b = Number(document.getElementById("b").value);
+				let h = Number(document.getElementById("h").value);
+				let print1 = document.getElementById("area");
+				let print2 = document.getElementById("tipo");
+				console.log(b);
+				console.log(h);
+
+				let area = Number((b * h) / 2).toFixed(2);
+				console.log("area", area);
+				let hipotenusa = Number(
+					Math.sqrt(Math.pow(h, 2) + Math.pow(b / 2, 2))
+				).toFixed(2);
+				console.log("hipotenusa", hipotenusa);
+				print1.innerHTML = `El area es ${area}`;
+
+				/*La teoria indica que un triangulo equilatero tiene todos sus lados iguales, 
+				por ende al calcular hipotenusa que seria uno de sus lados y compararlo con 
+				la base que otros de sus lados concluimos que es equilatero*/
+				if (Math.floor(b) === Math.floor(hipotenusa))
+					print2.innerHTML = "El triangulo es equilátero ";
+				else {
+					/*En caso contrario verificamos si es isosceles, 
+					la teoria indica que tiene 2 lados iguales, 
+					por ende concluimos que sus dos lados (hipotenusas serian igual).
+					Teniendo esto en cuenta calculo el area segun la formula de heron,
+					la que permite calcular el area usando sus lados.
+					Luego de calcular el area la comparo con la original, 
+					si son identicas entonces es isosceles, sino es escaleno, que segun 
+					la teoria, todos sus lados son distintos.
+					Nota: no puedo asegurar que mi logica es correcta totalmente, 
+					pero mediante esta logica logre conseguir los resultados.
+					*/
+					let p = 2 * hipotenusa + b;
+					console.log("perimetro", p);
+					let s = Number(p / 2).toFixed(2);
+					console.log(s);
+					let area2 = Number(
+						Math.sqrt(s * Math.pow(s - hipotenusa, 2) * (s - b))
+					).toFixed(2);
+					console.log("area 2", area2);
+					let result = area > area2 ? area - area2 : area2 - area;
+					if (result <= 0.1) {
+						console.log("entro aqui");
+						print2.innerHTML = "El triangulo es isósceles";
+					} else {
+						console.log("entro aca");
+						print2.innerHTML = "El triangulo es escaleno";
+					}
+				}
+			}
+		</script>
+	</body>
+</html>
