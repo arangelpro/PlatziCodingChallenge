@@ -5,6 +5,14 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Reto 2: Área de un Triángulo</title>
 	</head>
+	<style>
+		body {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+	</style>
 	<body>
 		<label for="b">Ingrese Base</label>
 		<input
@@ -29,8 +37,8 @@
 			alert("Bienvenido al Reto 2: Área de un Triángulo");
 			function handleArea() {
 				//debugger;
-				let b = Number(document.getElementById("b").value);
-				let h = Number(document.getElementById("h").value);
+				let b = Number(document.getElementById("b").value).toFixed(2);
+				let h = Number(document.getElementById("h").value).toFixed(2);
 				let print1 = document.getElementById("area");
 				let print2 = document.getElementById("tipo");
 				console.log(b);
@@ -47,8 +55,7 @@
 				/*La teoria indica que un triangulo equilatero tiene todos sus lados iguales, 
 				por ende al calcular hipotenusa que seria uno de sus lados y compararlo con 
 				la base que otros de sus lados concluimos que es equilatero*/
-				if (Math.floor(b) === Math.floor(hipotenusa))
-					print2.innerHTML = "El triangulo es equilátero ";
+				if (b === hipotenusa) print2.innerHTML = "El triangulo es equilátero ";
 				else {
 					/*En caso contrario verificamos si es isosceles, 
 					la teoria indica que tiene 2 lados iguales, 
@@ -61,7 +68,8 @@
 					Nota: no puedo asegurar que mi logica es correcta totalmente, 
 					pero mediante esta logica logre conseguir los resultados.
 					*/
-					let p = 2 * hipotenusa + b;
+
+					let p = Number(Number(2 * hipotenusa) + Number(b)).toFixed(2);
 					console.log("perimetro", p);
 					let s = Number(p / 2).toFixed(2);
 					console.log(s);
