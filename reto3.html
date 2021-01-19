@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Reto 3: Reloj</title>
+	</head>
+	<style>
+		body {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+		body form,
+		body div {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+	</style>
+	<body>
+		<h1>Reloj</h1>
+		<form id="data">
+			<label for="hour">Ingrese las Horas</label>
+			<input
+				id="hour"
+				type="number"
+				placeholder="Ingrese la Horas"
+				name="hour"
+				value="0"
+			/>
+			<label for="minute">Ingrese los Minutos</label>
+			<input
+				id="minute"
+				type="number"
+				placeholder="Ingrese la Minutos"
+				name="minute"
+				value="0"
+			/>
+			<button type="submit">Calcular Segundos</button>
+		</form>
+		<h2 id="seconds"></h2>
+		<div>
+			<h2>Python</h2>
+			<p>
+				HOUR_IN_SECONDS = 3600<br />MINUTE_IN_SECONDS = 60<br />hour =
+				int(input("Ingrese las Horas: "))<br />minute = int(input("Ingrese los
+				Segundos: "))<br />seconds = hour * HOUR_IN_SECONDS + minute *
+				MINUTE_IN_SECONDS<br />print("Los segundos son: ", seconds)
+			</p>
+		</div>
+		<div>
+			<h2>Php</h2>
+			<p>
+				define("HOUR_IN_SECONDS", 3600);<br />define("MINUTE_IN_SECONDS", 60);
+				<br />function calculateSeconds($hour, $minute) {<br />&nbsp;&nbsp;&nbsp;&nbsp;$seconds
+				= $hour * HOUR_IN_SECONDS + $minute * MINUTE_IN_SECONDS;<br />&nbsp;&nbsp;&nbsp;&nbsp;print("Los
+				segundos son: ", $seconds)<br />&nbsp;&nbsp;&nbsp;&nbsp;return
+				$seconds;<br />}
+			</p>
+		</div>
+		<script>
+			let data = document.getElementById("data");
+			const HOUR_IN_SECONDS = 3600;
+			const MINUTE_IN_SECONDS = 60;
+
+			alert("Hola bienvenido a Reto 3: Reloj");
+			function calculateSeconds(event) {
+				event.preventDefault();
+				let hour = Number.parseInt(document.getElementById("hour").value);
+				let minute = Number.parseInt(document.getElementById("minute").value);
+				let secondsHTML = document.getElementById("seconds");
+				let seconds = hour * HOUR_IN_SECONDS + minute * MINUTE_IN_SECONDS;
+				secondsHTML.innerHTML = `Son ${seconds} Segundos`;
+			}
+			data.addEventListener("submit", calculateSeconds);
+		</script>
+	</body>
+</html>
