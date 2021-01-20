@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Reto 4 - Repite la palabra</title>
+	</head>
+	<style>
+		body {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+		body form {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+	</style>
+	<body>
+		<h1>Repite la palabra</h1>
+		<form id="data">
+			<label for="word">Ingresa la palabra</label>
+			<input
+				id="word"
+				type="text"
+				placeholder="Ingresa la palabra"
+				name="word"
+			/>
+			<label for="quantity">Cuantas repeticiones</label>
+			<input id="quantity" type="number" name="quantity" value="0" />
+			<button type="submit">Repetir</button>
+		</form>
+		<h2 id="result"></h2>
+		<script>
+			let wordElement = document.getElementById("word");
+			let quantityElement = document.getElementById("quantity");
+			let resultElement = document.getElementById("result");
+			let data = document.getElementById("data");
+
+			function handleSubmit(event) {
+				event.preventDefault();
+				let quantity = Number.parseInt(quantityElement.value);
+				let word = wordElement.value;
+				word = repeatWord(word, quantity, "");
+				resultElement.innerHTML = word;
+			}
+
+			function repeatWord(word, quantity, result) {
+				if (quantity == 0) return result;
+
+				return repeatWord(word, quantity - 1, `${result} ${word}`);
+			}
+
+			data.addEventListener("submit", handleSubmit);
+		</script>
+	</body>
+</html>
