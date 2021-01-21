@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Reto 5: ¿Necesitamos vocales?</title>
+	</head>
+	<style>
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+		.content {
+			display: flex;
+			justify-content: center;
+		}
+		div {
+			padding: 0 30px;
+		}
+		.content p {
+			text-align: justify;
+		}
+		h2 {
+			text-align: center;
+		}
+		.content div:nth-of-type(1) {
+			border-right: 1px solid black;
+		}
+	</style>
+	<body>
+		<h1>Reto 5: ¿Necesitamos vocales?</h1>
+		<div class="content">
+			<div>
+				<h2>Parrafo Original</h2>
+				<p id="original"></p>
+			</div>
+
+			<div>
+				<h2>Parrafo Transformado</h2>
+				<p id="copy"></p>
+			</div>
+		</div>
+		<script>
+			let originalElement = document.getElementById("original");
+			let copyElement = document.getElementById("copy");
+
+			let original =
+				"En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga antigua, rocín flaco y galgo corredor. Una olla de algo más vaca que carnero, salpicón las más noches, duelos y quebrantos los sábados, lantejas los viernes, algún palomino de añadidura los domingos, consumían las tres partes de su hacienda. El resto della concluían sayo de velarte, calzas de velludo para las fiestas, con sus pantuflos de lo mesmo, y los días de entresemana se honraba con su vellorí de lo más fino. Tenía en su casa una ama que pasaba de los cuarenta y una sobrina que no llegaba a los veinte, y un mozo de campo y plaza que así ensillaba el rocín como tomaba la podadera. Frisaba la edad de nuestro hidalgo con los cincuenta años. Era de complexión recia, seco de carnes, enjuto de rostro, gran madrugador y amigo de la caza. Quieren decir que tenía el sobrenombre de «Quijada», o «Quesada», que en esto hay alguna diferencia en los autores que deste caso escriben, aunque por conjeturas verisímiles se deja entender que se llamaba «Quijana». Pero esto importa poco a nuestro cuento: basta que en la narración dél no se salga un punto de la verdad.";
+			let copy = original;
+			copy = copy.replaceAll(/[aA]/g, "@");
+			copy = copy.replaceAll(/[eE]/g, "3");
+			copy = copy.replaceAll(/[iI]/g, "1");
+			copy = copy.replaceAll(/[oO]/g, "0");
+			copy = copy.replaceAll(/[uU]/g, "\\/");
+			//copy.length
+			originalElement.innerHTML = original;
+			copyElement.innerHTML = copy;
+		</script>
+	</body>
+</html>
