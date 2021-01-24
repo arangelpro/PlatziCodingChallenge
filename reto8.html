@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Reto 8: Volumen de un cilindro</title>
+	</head>
+	<style>
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+	</style>
+	<body>
+		<div>
+			<label for="radio">Radio</label>
+			<input id="radio" name="radio" type="number" value="0"> cm
+		</div>
+		<div>
+			<label for="altura">Altura</label>
+			<input id="altura" name="altura" type="number" value="0"> cm
+		</div>		
+		<button type="button" onclick="handleVolumen()">Calcular Volumen</button>
+		<h2 id="result"></h2>
+		<script>
+			function volumenCilindro(radio, altura) {				
+				let volumen = Math.PI * Math.pow(radio, 2) * altura;
+				return volumen.toFixed(1);
+			}
+		
+			function handleVolumen() {
+				let radio = Number.parseFloat(document.getElementById("radio").value);
+				let altura = Number.parseFloat(document.getElementById("altura").value);
+				let result = document.getElementById("result");
+
+				result.innerHTML = `El volumen es ${volumenCilindro(radio, altura)} cm`
+			}
+		</script>
+	</body>
+</html>
