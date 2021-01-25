@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Reto 9: Número secreto</title>
+	</head>
+	<style>
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+	</style>
+	<body>
+		<div>
+			<label for="value">Ingresa un número</label>
+			<input id="value" name="value" type="number">
+		</div>
+		<button type="button" onclick="handleClick()">Verifica si es mayor</button>
+		<h2 id="result"></h2>
+		<script>
+			var numeroSecreto;
+			var intentos = 0;
+			function generarNumeroSecreto() {
+				return Math.floor(Math.random() * 100);
+			}
+			numeroSecreto = generarNumeroSecreto();
+
+			function handleClick() {
+				let value = Number.parseInt(document.getElementById("value").value);
+				let result = document.getElementById("result");
+				intentos += 1;
+				if(value > numeroSecreto) {
+					result.innerHTML = `Lo lograste en el intento ${intentos}, ${value} es mayor que ${numeroSecreto}`
+					intentos = 0;
+					numeroSecreto = generarNumeroSecreto();
+				} else {
+					result.innerHTML = `Lo siento, aun no lo consigues, sigue intentandolo`;
+				}
+			}
+		</script>
+	</body>
+</html>
