@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Reto 11: Generador de contraseñas</title>
+	</head>
+	<style>
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+	</style>
+	<body>
+		<h1>Generador de contraseñas</h1>
+		<label for="longitud">Indique sus preferencias para generar la contraseña</label>
+		<input id="longitud" type="number" name="longitud">
+		<label><input type="checkbox" id="minus" value="minus"> Minúsculas</label>
+		<label><input type="checkbox" id="mayus" value="mayus"> Mayúsculas</label>
+		<label><input type="checkbox" id="number" value="number"> Números</label>
+		<label><input type="checkbox" id="special" value="special"> Caracteres especiales (incluyendo espacios)</label>		
+
+		<button type="button" onclick="handleGenerate()">Generar</button>
+		<h2 id="result"></h2>
+		<script>
+			function generate(longitud, options) {
+				//minusculas: 97 - 122
+				//mayusculas: 65 - 90
+				//numbers: 48 - 57
+				//characters : 32 - 47, 58 - 64, 91 - 96, 123 - 126
+				let data = [];
+				if(options.minus) {  
+					data = concatenarData(data, 97, 122); 
+				}
+				if(options.mayus) {
+					data = concatenarData(data, 65, 90);
+				}
+				if(options.number) {   
+					data = concatenarData(data, 48, 57);
+				}
+				if(options.special) {
+					data = concatenarData(data, 32, 47);
+					data = concatenarData(data, 58, 64);
+					data = concatenarData(data, 91, 96);
+					data = concatenarData(data, 123, 126);
+				}
+				return generatePassword(longitud, data);
+
+			}
+
+			function generatePassword(longitud, data) {
+				let random = Math.floor(Math.random() * data.length);
+				if(longitud == 1)
+					return String.fromCharCode(data[random]);
+				return generatePassword(longitud -1, data) + String.fromCharCode(data[random]);
+			}
+
+			function concatenarData(data, from, to) {
+				for(let i=from; i<=to; i++)
+					data.push(i);
+				return data;
+			}
+
+			function handleGenerate() {
+				let result = document.getElementById("result");
+				let longitud = Number.parseInt(document.getElementById("longitud").value);
+				let minus = document.getElementById("minus");
+				let mayus = document.getElementById("mayus");
+				let number = document.getElementById("number");
+				let special = document.getElementById("special");
+				if(longitud > 0 || (minus.checked || minus.checked || minus.checked || minus.checked)){
+					let options = {
+						minus: minus.checked,
+						mayus: mayus.checked,
+						number: number.checked,
+						special: special.checked,
+					};
+
+					result.innerHTML = generate(longitud, options);
+				} else if(longitud <= 0) {
+					alert("Debes seleccionar una longitud mayor a 0");
+				} else {
+					alert("Debes seleccionar a lo menos 1 preferencia");
+				}
+			}
+		</script>
+	</body>
+</html>
