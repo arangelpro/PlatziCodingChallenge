@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Reto 12: Próximo cumpleaños</title>
+	</head>
+	<style>
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+	</style>
+	<body>
+		<h1>Próximo cumpleaños</h1>
+		<label for="day">Indica tu día de nacimiento</label>
+		<input id="day" type="number" name="day">
+		<label for="month">Indica tu mes de nacimiento</label>
+		<input id="month" type="number" name="month">
+		<label for="year">Indica tu año de nacimiento</label>
+		<input id="year" type="number" name="year">
+
+		<button type="button" onclick="handleDays()">Calcular</button>
+		<h2 id="result"></h2>
+		<script>			
+			function getDays(dateBirthDay, dateNow) {
+				let days;
+				let edad = dateBirthDay.getFullYear();
+
+				dateBirthDay.setFullYear(dateNow.getFullYear());
+
+				let msPerDay = 24 * 60 * 60 * 1000;
+				if(dateNow.getTime() >= dateBirthDay.getTime()) {
+					//dateNow.setFullYear(dateNow.getFullYear()+1);
+					dateBirthDay.setFullYear(dateNow.getFullYear()+1);	
+				} 
+
+				edad = dateNow.getFullYear() - edad;
+				days = (dateBirthDay.getTime() -dateNow.getTime()) / msPerDay;
+				days = Math.round(days);
+				return {
+					days,
+					edad
+				};
+			}
+
+			function handleDays() {
+				let day = Number.parseInt(document.getElementById("day").value);
+				let month = Number.parseInt(document.getElementById("month").value);
+				let year = Number.parseInt(document.getElementById("year").value);
+				let date;
+				let today = new Date();
+				if(day  && month && year){
+					if((day>=1 && day<=31) 
+						&& (month>=1 && month<=12) 
+						&& (year>1800 && year<=today.getFullYear())
+					) {
+						try {
+							date = new Date(year, month-1, day);
+							if(date < today) {
+								let result = document.getElementById("result");
+								date = getDays(date, today);
+								result.innerHTML = `Faltan ${date.days} dias para tu ${date.edad > 1 ? "cumpleaños " + date.edad : "primer cumpleaño"}`;
+							} else {
+								result.innerHTML = "Todavia no has nacido, te esperamos!";
+							}
+						} catch (error) {
+							alert("Lo sentimos, Fecha invalida");
+						}
+					}
+				}
+				
+			}
+		</script>
+	</body>
+</html>
