@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Reto 13: Calculadora de propina</title>
+	</head>
+	<style>
+		body, .actions {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+		.container, .form {
+			display: flex;
+			justify-content: center;			
+		}
+		.form {
+			margin: 10px 30px;
+		}
+		.actions {
+			margin: 0 30px;
+		}
+		.actions button {
+			margin-bottom: 10px;
+		}
+		.table {
+			width: 100%;
+			margin-bottom: 1rem;
+			background-color: transparent;
+			border-collapse: collapse;
+		}
+		.table thead th {
+			vertical-align: bottom;
+    		border-bottom: 2px solid #dee2e6;
+		}
+		.table td, .table th {
+			padding: .75rem;
+			vertical-align: top;
+			border-top: 1px solid #dee2e6;
+		}
+		.d-none {
+			display: none;
+		}
+	</style>
+	<body>
+		<h1>Calculadora de propina</h1>
+		<div class="container">
+			<div class="form">
+				<div>
+					<label for="value">Valor del plato</label>
+					<input id="value" type="number" name="value">
+				</div>			
+				<div class="actions">
+					<button type="button" onclick="handleAdd()">Agregar</button>
+					<button type="button" onclick="handleCalculate()">Calcular Propina</button>
+					<button type="button" onclick="handleClear()">Limpiar</button>
+				</div>
+			</div>
+			<table id="table" class="table d-none">
+				<thead>
+					<tr>
+						<th>Descripción</th>
+						<th>Valor</th>
+					</tr>
+				</thead>
+				<tbody id="tbody">
+				</tbody>
+				<tfoot id="tfoot">
+					<tr>
+						<td>Total</td>
+						<td id="total">$ 0</td>
+					</tr>
+					<tr id="trPropina" class="d-none">
+						<td>Propina</td>
+						<td id="propina"> $ 15</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+		<script>	
+			var index = 1;
+			var platos = [];	
+			var total = 0;	
+			var band = false;
+			var block = false;
+			function getPlatoHtml({id, description, value}) {
+				let tr = document.createElement("tr");
+				let td_1 = document.createElement("td");
+				let td_2 = document.createElement("td");	
+				td_1.setAttribute("id", id);		
+				td_1.innerHTML = description;
+				td_2.innerHTML = `$ ${value}`;
+				tr.appendChild(td_1);
+				tr.appendChild(td_2);
+				return tr;
+			}
+
+			function handleAdd() {
+				if(block) 
+					return;
+
+				let value = Number.parseInt(document.getElementById("value").value);
+				let tbody = document.getElementById("tbody");
+				let totalElement = document.getElementById("total");
+								
+				if(value > 0) {					
+					let plato = {
+						id: `plato${index}`,
+						description: `Plato #${index}`,
+						value
+					}
+					tbody.appendChild(getPlatoHtml(plato));
+					platos.push(plato);
+					total = platos.reduce((previos, current) => {
+						return previos + current.value;
+					},0);
+					totalElement.innerHTML = `$ ${total}`;	
+					if(index === 1 ) {
+						let table = document.getElementById("table");
+						table.classList.remove("d-none");
+					}	
+					index += 1;
+					band = true;			
+				}
+			}
+			
+			function handleCalculate() {
+				if(!band)				
+					return;
+				let propina = document.getElementById("propina");
+				let tr = document.getElementById("trPropina");
+				let valuePropina = total * 0.1;
+				propina.innerHTML = `$ ${valuePropina}`;
+				tr.classList.remove("d-none");
+				block = true;
+			}
+
+			function handleClear() {
+				if(total === 0)
+					return;
+				let table = document.getElementById("table");
+				let tbody = document.getElementById("tbody");
+				table.removeChild(tbody);
+				table.classList.add("d-none");
+				let tr = document.getElementById("trPropina");
+				tr.classList.add("d-none");
+				tbody = document.createElement("tbody");
+				tbody.setAttribute("id", "tbody")
+				table.appendChild(tbody);
+				total = 0;
+				index = 1;
+				band = false;
+				block = false;
+				platos = [];
+			}
+		</script>
+	</body>
+</html>
