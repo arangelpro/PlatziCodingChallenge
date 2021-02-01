@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Reto 16: Calculadora v2</title>
+	</head>
+	<style>
+		body {
+			overflow: hidden;
+		}
+		div {
+			border: 1px solid black;
+		}
+		.calculadora {
+			width: 400px;
+			margin: 0 auto;
+		}
+		.window {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100px;
+		}
+		@supports (resize: both) {
+			.window {
+				resize: both;
+				overflow: auto;
+			}
+		}
+		.window p {
+			--fontStretch: 500%;
+  			--fontSize: 78px;
+			width: 380px;
+  			height: 90px;
+			margin: 0 auto;
+			font-weight: bold;
+			text-align: center;
+			vertical-align: middle;
+			font-size: var(--fontSize);
+			font-stretch: var(--fontStretch);
+		}
+		.wrapper {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			grid-auto-rows: minmax(100px, auto);
+		}
+		.sumar {
+			grid-column: 4;
+			grid-row: 1 / 4;
+		}
+		.igual {
+			grid-column: 4;
+			grid-row: 4 / 6;
+		}
+		.cero {
+			grid-column: 1 / 3;
+			grid-row: 5;
+		}
+		.wrapper div {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 40px;
+		}
+		.btn:hover {
+			cursor: pointer;
+			background-color: rgba(0, 0, 0, 0.2);
+		}
+	</style>
+	<body>
+		<div class="calculadora">
+			<div id="window" class="window">
+				<p id="result">0</p>
+			</div>
+			<div class="wrapper">
+				<div id="dividir" onclick="handleClick('/')" class="dividir btn">/</div>
+				<div
+					id="multiplicar"
+					onclick="handleClick('*')"
+					class="multiplicar btn"
+				>
+					*
+				</div>
+				<div id="restar" onclick="handleClick('-')" class="restar btn">-</div>
+				<div id="sumar" onclick="handleClick('+')" class="sumar btn">+</div>
+				<div id="siete" onclick="handleClick('7')" class="siete btn">7</div>
+				<div id="ocho" onclick="handleClick('8')" class="ocho btn">8</div>
+				<div id="nueve" onclick="handleClick('9')" class="nueve btn">9</div>
+				<div id="cuatro" onclick="handleClick('4')" class="cuatro btn">4</div>
+				<div id="cinco" onclick="handleClick('5')" class="cinco btn">5</div>
+				<div id="seis" onclick="handleClick('6')" class="seis btn">6</div>
+				<div id="uno" onclick="handleClick('1')" class="uno btn">1</div>
+				<div id="dos" onclick="handleClick('2')" class="dos btn">2</div>
+				<div id="tres" onclick="handleClick('3')" class="tres btn">3</div>
+				<div id="cero" onclick="handleClick('0')" class="cero btn">0</div>
+				<div
+					id="punto"
+					onclick="alert('No esta habilitado actualmente');"
+					class="punto btn"
+				>
+					.
+				</div>
+				<div
+					id="igual"
+					onclick="handleClick('=')"
+					class="igual btn"
+				>
+					=
+				</div>
+			</div>
+		</div>
+		<script>
+			const operator = ["*", "/", "+", "-"];
+			let result = document.getElementById("result");
+			let values = [];
+			let value = "";
+			let error;
+			function calcularOperacion(values, i, operator) {
+				let num1, num2, result;
+				num1 = Number.parseInt(values[i-1]);
+				num2 = Number.parseInt(values[i+1]);
+				switch (operator) {
+					case "*":
+						console.log("Entro *");
+						result = num1 * num2;
+						break;
+					case "/":
+						console.log("Entro /");
+						result = num1 / num2;
+						break;
+					case "+":
+						console.log("Entro +");
+						result = num1 + num2;
+						break;
+					case "-":
+						console.log("Entro -");
+						result = num1 - num2;
+						break;
+				}
+				return result;
+			}
+			function calcularResultado(datos, index) {
+				let i, result;
+				console.log(datos, index);
+				if(datos.length === 1)
+					return Number.parseInt(datos[0]);
+				i = datos.indexOf(operator[index]);
+				console.log(i);
+				if(i !== -1) {
+					result = calcularOperacion(datos, i, operator[index]);
+					datos.splice(i-1, 3, result);
+				} else {
+					index += 1; 
+				} 				
+				return 	calcularResultado(datos, index);			
+			}
+			function validarFormato(option, value) {
+				if (operator.includes(option)) {
+					if (!value || (value && operator.includes(value))) {
+						alert(
+							"Disculpe, No puede seleccionar un operador, debe seleccionar un número"
+						);
+						return false;
+					}
+				} 
+				return true;
+			}
+			function handleClick(option) {
+				let resultado;
+				let result = document.getElementById("result");
+				error = false;
+				if (values.length > 0) {
+					value = values[values.length - 1];
+				} else {
+					value = "";
+				}
+				if(option === '=') {
+					if(operator.includes(value)) {
+						values.splice(values.length - 1, 1);
+					}
+					resultado = calcularResultado(values, 0);
+					result.innerHTML = resultado;
+					values = [];
+				} else {
+					if(!validarFormato(option, value))
+						return ;
+					if (value && !operator.includes(value) && !operator.includes(option)) {
+						values.splice(values.length-1, 1, `${value}${option}`);
+					} else {
+						values.push(option)
+					}					
+					result.innerHTML = values.join(' ');
+				} 
+			}
+		</script>
+	</body>
+</html>
