@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Reto 14: Números primos</title>
+	</head>
+	<style>
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+	</style>
+	<body>
+		<h1>Números primos</h1>
+		<label for="number">Ingrese Número</label>
+		<input type="number" id="number" name="number">
+		<button type="button" onclick="handleClick()">Obtener Primos</button>
+		<h2 id="result"></h2>
+		<script>	
+			function isPrimo(number) {
+				if(number > 2) {
+					if(number % 2 === 0) {
+						return false;
+					}
+				}
+				return true;
+			}
+			function getNumbers(limit) {	
+				let primos = [];			
+				for(let i=1; i<=limit; i++) {
+					if(isPrimo(i)) {
+						primos.push(i);
+					}
+				}
+				return primos;
+			}
+
+			function handleClick() {
+				let limit = Number.parseInt(document.getElementById("number").value);
+				let result = document.getElementById("result");
+
+				let primos = getNumbers(limit);
+				result.innerHTML = primos.join(', ');
+			}
+		</script>
+	</body>
+</html>
