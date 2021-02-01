@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Reto 15: Calculadora de volúmenes</title>
+	</head>
+	<style>
+		body{
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+		.d-none {
+			display: none;
+		}
+	</style>
+	<body>
+		<label for="option">Calcular Volumen</label>
+		<select name="option" id="option" onchange="handleSelection(this.value)">
+			<option value="">Seleccione una opción</option>
+			<option value="cilindro">Cilindro</option>
+			<option value="cubo">Cubo</option>
+			<option value="esfera">Esfera</option>
+		</select>
+		<label class="d-none" id="laltura" for="altura">Ingresa Altura</label>
+		<input class="d-none" type="number" name="altura" id="altura">
+		<label class="d-none" id="lradio" for="radio">Ingresa Radio</label>
+		<input class="d-none" type="number" name="radio" id="radio">
+		<button type="button" onclick="handleClick()">Calcular</button>
+		<h2 id="result"></h2>
+		<script>
+			var option;
+			
+			function volumenCilindro(altura, radio) {
+				let volumen = Math.PI * Math.pow(radio, 2) * altura;
+				return volumen.toFixed(1);
+			}
+
+			function volumenCubo(lado) {
+				return Math.pow(lado, 3).toFixed(1);
+			}
+
+			function volumenEsfera(radio) {
+				let volumen = (4 * Math.PI * Math.pow(radio, 3)) / 3;
+
+				return volumen.toFixed(1);
+			}
+
+			function handleSelection(value) {
+				this.option = value;
+				let laltura = document.getElementById("laltura");
+				let lradio = document.getElementById("lradio");
+				let altura = document.getElementById("altura");
+				let radio = document.getElementById("radio");
+				switch(option) {
+					case "cilindro": 
+						laltura.innerHTML = "Ingresa Altura";
+						lradio.innerHTML = "Ingresa Radio";
+						laltura.classList.remove("d-none");
+						lradio.classList.remove("d-none");
+						altura.classList.remove("d-none");
+						radio.classList.remove("d-none");
+						break;
+					case "cubo":
+						laltura.innerHTML = "Ingresa Lado";
+						laltura.classList.remove("d-none");						
+						altura.classList.remove("d-none");
+						if(!lradio.classList.contains("d-none")){
+							lradio.classList.add("d-none");
+							radio.classList.add("d-none");
+						}						
+						break;
+					case "esfera":
+						lradio.classList.remove("d-none");						
+						radio.classList.remove("d-none");
+						if(!laltura.classList.contains("d-none")){
+							laltura.classList.add("d-none");
+							altura.classList.add("d-none");
+						}	
+						break;
+				}
+			}
+
+			function handleClick() {
+				let volumen;
+				let altura;
+				let radio;
+				console.log(this.option);
+				switch(this.option) {
+					case "cilindro":
+						altura = Number.parseInt(document.getElementById("altura").value);
+						radio = Number.parseInt(document.getElementById("radio").value);
+						volumen = volumenCilindro(altura, radio);
+						break;
+					case "cubo":
+						altura = Number.parseInt(document.getElementById("altura").value);
+						volumen = volumenCubo(altura);
+						break;
+					case "esfera":
+						radio = Number.parseInt(document.getElementById("radio").value);
+						volumen = volumenEsfera(radio);
+						break;
+				}
+				
+				let result = document.getElementById("result");
+
+				result.innerHTML = `El volumen es ${volumen}`;
+			}
+		</script>
+	</body>
+</html>
