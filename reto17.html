@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Reto 17: Ordenar una lista de números de mayor a menor</title>
+	</head>
+	<style>
+		body{
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+	</style>
+	<body>
+		<h1>Lista Generada</h1>
+		<h2 id="listaul"></h2>
+		<button type="button" onclick="handleClick()">Ordenar</button>
+		<h2 id="listaol"></h2>
+		<script>
+			let lista = [];
+			let listaul = document.getElementById("listaul");
+			function generarLista() {
+				let max = Math.floor(Math.random() * 20);
+				for(let i = 0; i < max; i++) {
+					lista.push(Math.floor(Math.random() * 100));
+				}
+			}			
+
+			function ordenarMayorMenor(lista) {
+				for(let i=0; i<lista.length-1; i++){
+					for(let j=i+1; j<lista.length; j++){
+						if(lista[i] < lista[j]) {
+							let num = lista[j];
+							lista[j] = lista[i];
+							lista[i] = num;
+						}
+					}					
+				}
+				return lista;
+			}
+
+			function handleClick() {
+				let listaol = document.getElementById('listaol');
+				lista = ordenarMayorMenor(lista);
+				listaol.innerHTML = lista.join(', ');
+			}
+
+			generarLista();
+			listaul.innerHTML = lista.join(', ');
+		</script>
+	</body>
+</html>
