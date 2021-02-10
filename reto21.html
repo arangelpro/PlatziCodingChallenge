@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Reto 21: Memory (parte 4)</title>
+	<title>Reto 21: ¿Cuánto vas a ahorrar?</title>
 </head>
 <style>
 	body {
@@ -12,129 +12,49 @@
 		flex-direction: column;
 		align-items: center;
 	}
-
-	h2 {
-		text-align: center;
-	}
-
-	.d-none {
-		display: none;
-	}
 </style>
 
 <body>
-	<h1>Memory</h1>
-	<button id="btn-generar" type="button" onclick="handleGenerar()">Generar</button>
-	<div id="checkboxes" class="d-none">
-		<label for="">Selecciona el orden de las letras correcto</label>
-		<ol>
-			<li><input type="checkbox" name="select" id='"' value="0" onclick="handleCheck(this);">"</li>
-			<li><input type="checkbox" name="select" id='#' value="1" onclick="handleCheck(this);">#</li>
-			<li><input type="checkbox" name="select" id='$' value="2" onclick="handleCheck(this);">$</li>
-			<li><input type="checkbox" name="select" id='%' value="3" onclick="handleCheck(this);">%</li>
-			<li><input type="checkbox" name="select" id='(' value="4" onclick="handleCheck(this);">(</li>
-			<li><input type="checkbox" name="select" id=')' value="5" onclick="handleCheck(this);">)</li>
-			<li><input type="checkbox" name="select" id='/' value="6" onclick="handleCheck(this);">/</li>
-			<li><input type="checkbox" name="select" id='&' value="7" onclick="handleCheck(this);">&</li>
-		</ol>
-		<h2 id="select"></h2>
-	</div>
-	<h2 id="result"></h2>
-	<button id="nuevoJuego" class="d-none" type="button" onclick="nuevoJuego()">Nuevo Juego</button>
-	<button id="nuevoIntento" class="d-none" type="button" onclick="nuevoIntento()">Intentar de nuevo!</button>
+	<h1>¿Cuánto vas a ahorrar?</h1>
+	<p>Para ahorrar 100$ mensuales</p>
+	<button id="btn-generar" type="button" onclick="handleGenerar()">Calcular Ahorro</button>
+	<p id="result"></p>
 	<script>
-		let lista = ['"', '#', '$', '%', '(', ')', '/', '&'];
-		let listaGenerada = [];
-		let listaMemory = [];
-		var time = 4000;
-		function memory(lista, i, listaGenerada) {
-			let index;
-			while (true) {
-				index = Math.floor(Math.random() * (lista.length - 1));
-				if (listaGenerada.indexOf(lista[index]) === -1) {
-					listaGenerada.push(lista[index]);
-					break;
-				}
-			}
-			if (i === 1)
-				return listaGenerada;
+		let amount = 100;
+		let tax = 4;
 
-			return memory(lista, i - 1, listaGenerada);
+		function calcular(amount, tax, month) {
+			let total = 0;
+			tax = Number.parseFloat(1 + (tax / 100));
+			for (let i = 0; i < month; i++) {
+				total = Number.parseFloat((total + amount) * tax);
+			}
+
+			return total.toFixed(2);
 		}
 
 		function handleGenerar() {
 			let result = document.getElementById('result');
-			listaGenerada = memory(lista, 4, []);
-			result.innerHTML = listaGenerada.join(" ");
-			setTimeout(() => {
-				let result = document.getElementById('result');
-				let checkboxes = document.getElementById('checkboxes');
-				let btn = document.getElementById('btn-generar');
-				result.innerHTML = "";
-				checkboxes.classList.remove("d-none");
-				btn.classList.add("d-none");
-			}, time);
-		}
-
-		function handleCheck(checkbox) {
-			let i = Number.parseInt(checkbox.value);
-			let select = document.getElementById('select');
-			listaMemory.push(lista[i]);
-			select.innerHTML = listaMemory.join(' ');
-			checkbox.setAttribute("disabled", true);
-			if (listaMemory.length === 4) {
-				bloquearCheckboxes();
-				verify(listaMemory);
-			}
-		}
-
-		function verify(lista) {
-			let result = document.getElementById('result');
-			let nuevoJuego = document.getElementById('nuevoJuego');
-
-			if (lista.join(" ") === listaGenerada.join(" ")) {
-				result.innerHTML = "Excelente memoria, Ganaste!";
-			} else {
-				let nuevoIntento = document.getElementById('nuevoIntento');
-				result.innerHTML = "Lo siento, Perdiste!";
-				nuevoIntento.classList.remove("d-none");
-			}
-			nuevoJuego.classList.remove("d-none");
-		}
-		function nuevoIntento() {
-			let result = document.getElementById('result');
-			let select = document.getElementById('select');
-			let nuevoJuego = document.getElementById('nuevoJuego');
-			let nuevoIntento = document.getElementById('nuevoIntento');
-
-			nuevoJuego.classList.add("d-none");
-			nuevoIntento.classList.add("d-none");
-			result.innerHTML = "";
-			select.innerHTML = "";
-			listaMemory = [];
-			generarNuevoCheckbox();
-		}
-
-		function nuevoJuego() {
-			let checkboxes = document.getElementById('checkboxes');
-			let btn = document.getElementById('btn-generar');
-			nuevoIntento();
-			checkboxes.classList.add("d-none");
-			btn.classList.remove("d-none");
-		}
-
-		function generarNuevoCheckbox() {
-			let select = document.getElementsByName("select");
-			for (var checkbox of select) {
-				checkbox.checked = false;
-				checkbox.removeAttribute("disabled");
-			};
-		}
-		function bloquearCheckboxes() {
-			let select = document.getElementsByName("select");
-			for (var checkbox of select) {
-				checkbox.setAttribute("disabled", "disabled");
-			};
+			let months = [
+				{
+					month: 6,
+					total: 0,
+				},
+				{
+					month: 12,
+					total: 0,
+				},
+				{
+					month: 24,
+					total: 0,
+				}
+			];
+			let message = "";
+			months.map(item => {
+				item.total = calcular(amount, tax, item.month);
+				message += `Al mes ${item.month} ahorrarías ${item.total}$  <br />`;
+			});
+			result.innerHTML = message;
 		}
 	</script>
 </body>
