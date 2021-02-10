@@ -24,10 +24,10 @@
 		let tax = 4;
 
 		function calcular(amount, tax, month) {
-			let total = 0;
+			let total = amount;
 			tax = Number.parseFloat(1 + (tax / 100));
 			for (let i = 0; i < month; i++) {
-				total = Number.parseFloat((total + amount) * tax);
+				total = Number.parseFloat(total * tax);
 			}
 
 			return total.toFixed(2);
