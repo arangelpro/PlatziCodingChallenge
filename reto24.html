@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Reto 24: ¿Puedo ahorrar en otros bancos?</title>
+</head>
+<style>
+	body {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+</style>
+
+<body>
+	<h1>¿Puedo ahorrar en otros bancos?</h1>
+	<label for="number">Monto Inicial</label>
+	<input type="number" name="number" id="amount">
+	<label for="number">¿Que mes quieres calcular?</label>
+	<input type="number" name="number" id="month">
+	<button id="btn-generar" type="button" onclick="handleGenerar()">Calcular Ahorro</button>
+	<p id="result1"></p>
+	<p id="result2"></p>
+	<p id="result3"></p>
+	<script>
+		let tax1 = 4;
+		let tax2 = 3;
+		let taxplus = 7;
+		taxplus = Number.parseFloat(1 + (taxplus / 100));
+		function calcular(amount, tax, month, plus) {
+			let total = amount;
+			tax = Number.parseFloat(1 + (tax / 100));
+			for (let i = 0; i < month; i++) {
+				total = Number.parseFloat(total * tax);
+				if (plus && ((i + 1) % 12) === 0) {
+					total = Number.parseFloat(total * taxplus);
+				}
+			}
+
+			return total.toFixed(2);
+		}
+
+		function crearMonth(month) {
+			return new Array(
+				{
+					month: 6,
+					total: 0,
+				},
+				{
+					month: 12,
+					total: 0,
+				},
+				{
+					month: 24,
+					total: 0,
+				},
+				{
+					month: 36,
+					total: 0,
+				},
+				{
+					month,
+					total: 0
+				}
+			);
+		}
+		function orderMonth(months) {
+			for (i = 0; i < months.length - 1; i++) {
+				for (j = i + 1; j < months.length; j++) {
+					if (months[i].month > months[j].month) {
+						let aux = months[i].month;
+						months[i].month = months[j].month;
+						months[j].month = aux;
+					}
+				}
+			}
+			return months;
+		}
+
+		function handleGenerar() {
+			let result1 = document.getElementById('result1');
+			let result2 = document.getElementById('result2');
+			let result3 = document.getElementById('result3');
+			let amount = Number.parseInt(document.getElementById('amount').value);
+			let month = Number.parseInt(document.getElementById('month').value);
+			if (amount <= 0 && month <= 0)
+				return;
+
+			let bank1 = crearMonth(month);
+			let bank2 = crearMonth(month);
+			bank1 = orderMonth(bank1);
+			bank2 = orderMonth(bank2);
+			let message = "Banco 1";
+			bank1 = bank1.map(item => {
+				item.total = calcular(amount, tax1, item.month, false);
+				message += `<br />Al mes ${item.month} ahorrarías ${item.total}$`;
+				return item;
+			});
+			result1.innerHTML = message;
+			message = "Banco 2";
+			bank2 = bank2.map(item => {
+				item.total = calcular(amount, tax2, item.month, true);
+				message += `<br />Al mes ${item.month} ahorrarías ${item.total}$`;
+				return item;
+			});
+			result2.innerHTML = message;
+			message = "Analizamos lo siguiente en base a los resultados";
+			for (let i = 12; i <= 36; i = i + 12) {
+				let item1 = bank1.find(item => item.month === i);
+				let item2 = bank2.find(item => item.month === i);
+				if (item1.total > item2.total) {
+					message += `<br/> a ${(i / 12)} ${i > 12 ? "años" : "año"} te conviene más el banco 1`;
+				} else if (item1.total < item2.total) {
+					message += `<br /> a ${(i / 12)} ${i > 12 ? "años" : "año"} te conviene más el banco 2`;
+				} else {
+					message += `<br /> a ${(i / 12)} ${i > 12 ? "años" : "año"} en ambos bancos generarias lo mismo`;
+				}
+			}
+			result3.innerHTML = message;
+		}
+	</script>
+</body>
+
+</html>
