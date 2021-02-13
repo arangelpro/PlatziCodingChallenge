@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Reto 28: Código Morse</title>
+</head>
+<style>
+	body {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+</style>
+
+<body>
+	<h1>Código Morse</h1>
+	<label for="word">Ingrese frase a convertir</label>
+	<textarea name="word" id="word" cols="30" rows="10"></textarea>
+	<button type="button" onclick="handleTranslate()">Traducir</button>
+	<h2 id="result"></h2>
+	<script>
+		let morse = {
+			"a": ".-",
+			"b": "-...",
+			"c": "-.-.",
+			"d": "-..",
+			"e": ".",
+			"f": "..-.",
+			"g": "--.",
+			"h": "....",
+			"i": ".. ",
+			"j": ".---",
+			"k": "-.-",
+			"l": ".-..",
+			"m": "--",
+			"n": "-.",
+			"o": "---",
+			"p": ".--.",
+			"q": "--.-",
+			"r": ".-.",
+			"s": "...",
+			"t": "-",
+			"u": "..-",
+			"v": "...-",
+			"w": ".--",
+			"x": "-..-",
+			"y": "-.--",
+			"z": "--..",
+		}
+		function translate(words) {
+			let words_translate = "";
+			for (let i = 0; i < words.length; i++) {
+				if (morse[words[i]])
+					words_translate += morse[words[i]] + " ";
+			}
+			return words_translate;
+		}
+		function handleTranslate() {
+			let words = document.getElementById("word").value;
+			let result = document.getElementById("result");
+			result.innerHTML = translate(words);
+		}
+	</script>
+</body>
+
+</html>
