@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Reto 25-26-27: Ordenando ando</title>
+</head>
+<style>
+	body {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+</style>
+
+<body>
+	<h1>Ordenando</h1>
+	<input type="file" id="file" name="file" />
+	<h2>Ordenamiento de Burbuja (BubbleSort)</h2>
+	<p id="result1"></p>
+	<h2>Ordenamiento por mezcla (MergeSort)</h2>
+	<button id="btn-generar" type="button" onclick="handleGenerar()">Ordenar</button>
+	<p id="result2"></p>
+	<script>
+		//let array = ["Anthony", "Rosmara", "Aura", "Tony", "Maro", "Oliangel"];
+		let file;
+		function merge(array1, array2, i, j, array) {
+			if (array1.length === i) {
+				if (array2.length !== j) {
+					for (let x = j; x < array2.length; x++)
+						array.push(array2[x]);
+				}
+				return array;
+			} else if (array2.length === j) {
+				if (array1.length !== i) {
+					for (let x = i; x < array1.length; x++)
+						array.push(array1[x]);
+				}
+				return array;
+			} else {
+				if (compare(array1[i], array2[j])) {
+					array.push(array1[i]);
+					i += 1;
+				} else {
+					array.push(array2[j]);
+					j += 1;
+				}
+				return merge(array1, array2, i, j, array);
+			}
+		}
+
+		function sort(array) {
+			if (array.length > 2) {
+				let index = array.length;
+				let medio = Math.floor(index / 2);
+
+				let array1 = array.slice(0, medio);
+				let array2 = array.slice(medio, index);
+
+				array1 = sort(array1);
+				array2 = sort(array2);
+				return merge(array1, array2, 0, 0, []);
+			} else {
+				if (array.length === 2) {
+					if (!compare(array[0], array[1])) {
+						let aux = array[0];
+						array[0] = array[1];
+						array[1] = aux;
+					}
+				}
+				return array;
+			}
+		}
+		function mergeSort() {
+			readFile(function (names) {
+				let result2 = document.getElementById("result2");
+				let start, end, diff, time;
+				start = Date.now();
+				sort(names);
+				end = Date.now();
+				diff = end - start;
+				time = Number.parseFloat(diff / 100);
+
+				result2.innerHTML = `Se ordeno el archivo correctamente en un tiempo de ${time} segundos`;
+			});
+		}
+		function bubbleSort(array) {
+			for (let i = 1; i < array.length; i++) {
+				for (let j = 0; j < array.length - 1; j++) {
+					if (!compare(array[j], array[j + 1])) {
+						let aux = array[j];
+						array[j] = array[j + 1];
+						array[j + 1] = aux;
+					}
+				}
+			}
+			return array;
+		}
+
+		function bubble() {
+			readFile(function (names) {
+				let result1 = document.getElementById("result1");
+				let start, end, diff, time;
+				start = Date.now();
+				bubbleSort(names);
+				end = Date.now();
+				diff = end - start;
+				time = Number.parseFloat(diff / 100);
+				result1.innerHTML = `Se ordeno el archivo correctamente en un tiempo de ${time} segundos`;
+			});
+		}
+		function compare(name1, name2) {
+			let length = name1.length;
+			if (length > name2.length) {
+				length = name2.length;
+			}
+			for (let i = 0; i < length; i++) {
+				if (name1[i] > name2[i])
+					return false;
+				else if (name1[i] < name2[i])
+					return true;
+			}
+			if (name1.length > name2.length)
+				return false;
+			else
+				return true;
+		}
+
+		function handleGenerar() {
+			bubble();
+			mergeSort();
+		}
+		function loadFile(evt) {
+			file = evt.target.files[0];
+		}
+
+		function readFile(cb) {
+			let reader = new FileReader();
+			reader.onload = (e) => {
+				// Cuando el archivo se terminó de cargar
+				let text = e.target.result;
+				let names = text.replace(/\r/g, '').split('\n');
+				names = names.filter(item => (item !== "Nombre" && item !== ""));
+				cb(names);
+			};
+			// Leemos el contenido del archivo seleccionado
+			reader.readAsBinaryString(file);
+		}
+		document.getElementById('file').addEventListener('change', loadFile, false);
+	</script>
+</body>
+
+</html>
