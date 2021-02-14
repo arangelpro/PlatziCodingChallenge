@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Reto 29: Teléfono</title>
+</head>
+<style>
+	body {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+</style>
+
+<body>
+	<h1>Teléfono</h1>
+	<label for="phone">Ingrese teléfono</label>
+	<input type="phone" name="phone" id="phone">
+	<button type="button" onclick="handleGenerate()">Generar</button>
+	<h2 id="result"></h2>
+	<script>
+		let dataNumbers = { '0': ' ', '1': ' ', '2': 'ABC', '3': 'DEF', '4': 'GHI', '5': 'JKL', '6': 'MNO', '7': 'PQRS', '8': 'TUV', '9': 'WXYZ' };
+		function generateLetters(number) {
+			let letters = [];
+			for (let i = 0; i < number.length; i++) {
+				let value = dataNumbers[number.charAt(i)];
+				let lettersItem = {
+					'number': number.charAt(i) + "i" + i,
+					'letters': [],
+					'index': 0,
+					'completed': false
+				};
+				for (let j = 0; j < value.length; j++) {
+					lettersItem.letters.push({
+						'letter': value.charAt(j),
+					});
+				}
+				letters.push(lettersItem);
+			}
+			return letters;
+		}
+		function generateWords(number, data) {
+			let words = "";
+			let word = "", aux = "";
+			let i = 0;
+			while (true) {
+				if (i < 0) {
+					break;
+				}
+				let item;
+				let band = false;
+				let value;
+				if ((i + 1) < number.length) {
+					value = number.charAt(i + 1) + "i" + (i + 1);
+					item = data.find(item => item.number === value);
+					if (item.completed) {
+						value = number.charAt(i) + "i" + i;
+						item = data.find(item => item.number === value);
+						word = aux.substr(0, i);
+
+						item.index += 1;
+						if (item.index >= item.letters.length && item.index > 0) {
+							item.completed = true;
+							item.index = -1;
+							i -= 1;
+							continue;
+						} else {
+							item.completed = false;
+						}
+					}
+				} else {
+					word = aux;
+					band = true;
+				}
+				value = number.charAt(i) + "i" + i;
+				item = data.find(item => item.number === value);
+				if (item.letters.length > 0) {
+					word += item.letters[item.index].letter;
+				}
+				if (band) {
+					item.index += 1;
+					words += word + "<br />";
+					if (item.index >= item.letters.length) {
+						item.completed = true;
+						item.index = 0;
+						i -= 1;
+					} else {
+						item.completed = false;
+					}
+				} else {
+					aux = word;
+					i += 1;
+				}
+			}
+			return words.replaceAll(' ', '');
+		}
+
+		function handleGenerate() {
+			let phone = document.getElementById("phone").value;
+			if (phone.length !== 7 || isNaN(phone)) {
+				alert("Debe ingresar un teléfono de 7 digitos");
+				return;
+			}
+			let result = document.getElementById("result");
+			let data = generateLetters(phone);
+			result.innerHTML = generateWords(phone, data);
+		}
+	</script>
+</body>
+
+</html>
