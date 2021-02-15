@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Reto 30: Risk</title>
+</head>
+<style>
+	body {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+</style>
+
+<body>
+	<h1>Risk</h1>
+	<h2>Atacante</h2>
+	<button id="atacante" type="button" onclick="handleAtacante()">Lanza los dados</button>
+	<h2 id="result1"></h2>
+	<h2>Defensor</h2>
+	<button id="defensor" type="button" onclick="handleDefensor()">Lanza los dados</button>
+	<h2 id="result2"></h2>
+	<h2 id="result"></h2>
+	<script>
+		let dados = 6;
+		let atacante = [];
+		let defensor = [];
+		function simulador(repeat) {
+			let random, values = [];
+			for (let i = 0; i < repeat; i++) {
+				random = 0;
+				while (random === 0) {
+					random = Math.floor(Math.random() * 6);
+				}
+				values.push(random);
+			}
+
+			return values;
+		}
+		function mayorNumero(array) {
+			let numero = 0;
+			let indice;
+			array.map((item, key) => {
+				if (item > numero) {
+					numero = item;
+					indice = key;
+				}
+			});
+			return indice;
+		}
+		function comparar(atacante, defensor) {
+			let message1 = "";
+			let message2 = "";
+			let message3 = "";
+			let cont1 = 0; cont2 = 0;
+			for (let i = 0; i < 2; i++) {
+				numero1 = atacante.splice(mayorNumero(atacante), 1);
+				numero2 = defensor.splice(mayorNumero(defensor), 1);
+				if (numero1 < numero2) {
+					cont1++;
+					if (message1 !== "") {
+						message1 = message1.replace(":cont", 2);
+						message1 = message1.replace(":message", ` y ${numero2} es mayor que ${numero1}`);
+					} else {
+						message1 = `El atacante pierde :cont (${numero2} es mayor que ${numero1}:message)`;
+					}
+				} else if (numero2 < numero1) {
+					cont2++;
+					if (message2 !== "") {
+						message2 = message2.replace(":cont", 2);
+						message2 = message2.replace(":message", ` y ${numero1} es mayor que ${numero2}`);
+					} else {
+						message2 = `El defensor pierde :cont (${numero1} es mayor que ${numero2}:message)`;
+					}
+				} else {
+					if (message3 !== "") {
+						message3 = message3.replace(":message", ` y ${numero1} es igual que ${numero2}`);
+					} else {
+						message3 = `Ni defensor ni atacante pierden (${numero1} es igual que ${numero2}:message)`;
+					}
+				}
+			}
+			if (cont1 === 1)
+				message1 = message1.replace(":cont", cont1);
+			else
+				message1 = message1.replace(":cont", "").replace(":message", "");
+			if (cont2 === 1)
+				message2 = message2.replace(":cont", cont2);
+			else
+				message2 = message2.replace(":cont", "").replace(":message", "");
+			message1 = message1.replace(":message", "");
+			message2 = message2.replace(":message", "");
+			message3 = message3.replace(":message", "");
+			return message1 + " " + message2 + " " + message3;
+		}
+
+		function jugar(jugador) {
+			if (jugador === 'atacante') {
+				let result1 = document.getElementById("result1");
+				atacante = simulador(3);
+				result1.innerHTML = atacante.join(' ');
+			} else {
+				let result2 = document.getElementById("result2");
+				defensor = simulador(2);
+				result2.innerHTML = defensor.join(' ');
+			}
+			if (atacante.length > 0 && defensor.length > 0) {
+				let result = document.getElementById("result");
+				let message = comparar(atacante, defensor);
+				result.innerHTML = message;
+				limpiar();
+			}
+		}
+		function limpiar() {
+			atacante = [];
+			defensor = [];
+		}
+		function handleAtacante() {
+			atacante = [];
+			jugar("atacante");
+		}
+		function handleDefensor() {
+			defensor = [];
+			jugar("defensor");
+		}
+	</script>
+</body>
+
+</html>
