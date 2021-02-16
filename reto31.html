@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Reto 31: Teorema de Pitágoras</title>
+</head>
+<style>
+	body {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.d-none {
+		display: none;
+	}
+</style>
+
+<body>
+	<h1>Teorema de Pitágoras</h1>
+	<table>
+		<thead>
+			<tr>
+				<th></th>
+				<th>X</th>
+				<th>Y</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>A</td>
+				<td>
+					<input type="number" id="ax" />
+				</td>
+				<td>
+					<input type="number" id="ay" />
+				</td>
+			</tr>
+			<tr>
+				<td>B</td>
+				<td>
+					<input type="number" id="bx" />
+				</td>
+				<td>
+					<input type="number" id="by" />
+				</td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td style="text-align: center;" colspan="3">
+					<button type="button" onclick="handleCalcular()">
+						Calcular Distancia
+					</button>
+				</td>
+			</tr>
+			<tr id="distance" class="d-none">
+				<td colspan="3">
+					<h2 id="result"></h2>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+	<script>
+		function calcularDistancia(ax, ay, bx, by) {
+			let a = ay - by;
+			let b = ax - bx;
+			if (a < 0)
+				a = a * (-1);
+			if (b < 0)
+				b = b * (-1);
+
+			let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+			return c.toFixed(6);
+		}
+		function handleCalcular() {
+			let result = document.getElementById("result");
+			let tr = document.getElementById("distance");
+
+			let ax = Number.parseInt(document.getElementById("ax").value);
+			let ay = Number.parseInt(document.getElementById("ay").value);
+			let bx = Number.parseInt(document.getElementById("bx").value);
+			let by = Number.parseInt(document.getElementById("by").value);
+
+			let distance = calcularDistancia(ax, ay, bx, by);
+
+			result.innerHTML = `La distancia entre el punto A(${ax},${ay}) y el punto B(${bx},${by}) es ${distance}`;
+			tr.classList.remove("d-none");
+		}
+	</script>
+</body>
+
+</html>
