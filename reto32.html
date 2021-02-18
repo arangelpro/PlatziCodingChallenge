@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Reto 32: Ecuaciones cuadráticas</title>
+</head>
+<style>
+	body {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+</style>
+
+<body>
+	<h1>Ecuaciones cuadráticas</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>A</th>
+				<th></th>
+				<th>B</th>
+				<th></th>
+				<th>C</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><input type="number" id="a"></td>
+				<td>X^2</td>
+				<td><input type="number" id="b"></td>
+				<td>X</td>
+				<td><input type="number" id="c"></td>
+				<td>=0</td>
+			</tr>
+		</tbody>
+	</table>
+	<button type="button" onclick="handleCalcular()">Calcular Ecuación</button>
+	<h2 id="result"></h2>
+	<script>
+		function calcularEcuacion(a, b, c) {
+			let discriminante = Math.pow(b, 2) - 4 * a * c;
+			let x1, x2, aux;
+			let message = "";
+
+			aux = Number.parseFloat((b * (-1)) / (2 * a));
+			if (discriminante > 0) {
+				x1 = Number.parseFloat(aux - (Math.sqrt(discriminante) / (2 * a)));
+				x2 = Number.parseFloat(aux + (Math.sqrt(discriminante) / (2 * a)));
+				message = `Tiene 2 raices reales distintas<br />x1 = ${x1}<br />x2 = ${x2}<br />Punto1(${x1}, 0)<br />Punto2(${x2}, 0)`;
+			} else if (discriminante === 0) {
+				x1 = aux;
+				message = `Tiene 1 raiz real pero de multiciplicidad doble<br />x = ${x1}<br />Punto(${x1}, 0)`;
+			} else {
+				let i = Number.parseFloat(Math.sqrt((discriminante) * (-1)) / (2 * a));
+				message = `Tiene 2 raices complejas conjugadas<br />x1 = ${aux} + i * (${i})<br />x2 = ${aux} - i * (${i})`;
+			}
+			return message;
+		}
+		function handleCalcular() {
+			let result = document.getElementById("result");
+
+			let a = Number.parseInt(document.getElementById("a").value);
+			let b = Number.parseInt(document.getElementById("b").value);
+			let c = Number.parseInt(document.getElementById("c").value);
+
+			if (a === 0) {
+				alert("Disculpe a debe ser diferente de cero a<>0");
+				return;
+			}
+			let message = calcularEcuacion(a, b, c);
+
+			result.innerHTML = message;
+		}
+	</script>
+</body>
+
+</html>
